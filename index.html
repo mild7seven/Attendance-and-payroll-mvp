@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#123c35"><meta name="description" content="PWA kehadiran dan payroll pekerja offline-first">
+<link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
+<title>Attendance & Payroll</title>
+</head>
+<body>
+<header class="topbar"><div><div class="eyebrow">WORKFORCE</div><h1>Attendance & Payroll</h1></div><span id="connection" class="pill">Offline-ready</span></header>
+<main>
+<section class="panel profile">
+  <div class="section-head"><div><div class="eyebrow">PROFIL PEKERJA</div><h2>Data payroll</h2></div><button id="saveProfile" class="primary">Simpan profil</button></div>
+  <div class="grid">
+    <label>ID pekerja<input id="employeeId" placeholder="EMP-001"></label>
+    <label>Nama pekerja<input id="employeeName" placeholder="Nama lengkap"></label>
+    <label>Departemen<input id="department" placeholder="Departemen"></label>
+    <label>Jabatan<input id="position" placeholder="Jabatan"></label>
+    <label>Basic salary (Rp)<input id="salary" type="number" min="0" placeholder="Input manual"></label>
+    <label>Upah sebulan untuk unpaid leave (Rp)<input id="unpaidWage" type="number" min="0" placeholder="Kosong = basic salary"></label>
+  </div>
+</section>
+<section class="panel">
+  <div class="section-head"><div><div class="eyebrow">ATTENDANCE LOG</div><h2>Periode kehadiran</h2></div><div class="period-nav"><button id="prevPeriod" aria-label="Periode sebelumnya">‹</button><input id="period" type="month"><button id="nextPeriod" aria-label="Periode berikutnya">›</button></div></div>
+  <p id="periodLabel" class="muted"></p>
+  <div class="summary" id="summary"></div>
+  <div class="section-head compact"><h3>Tambah / koreksi kehadiran</h3></div>
+  <form id="attendanceForm" class="grid">
+    <label>Tanggal shift<input id="attDate" type="date" required></label>
+    <label>Dinas<select id="shift"><option value="PAGI">Pagi · 06.00–14.00</option><option value="SORE">Sore · 14.00–22.00</option><option value="MALAM">Malam · 22.00–06.00 (+1)</option></select></label>
+    <label>Status<select id="status"><option value="HADIR">Hadir</option><option value="SAKIT_DIBAYAR">Sakit dibayar</option><option value="SAKIT_TIDAK_DIBAYAR">Sakit tidak dibayar</option><option value="IZIN_DIBAYAR">Izin dibayar</option><option value="IZIN_TIDAK_DIBAYAR">Izin tidak dibayar</option><option value="CUTI">Cuti</option><option value="ABSEN">Absen</option><option value="LIBUR">Libur</option></select></label>
+    <label>Jam masuk<input id="clockIn" type="time"></label><label>Jam pulang<input id="clockOut" type="time"></label>
+    <label>Catatan<input id="note" placeholder="Opsional"></label>
+    <div class="form-actions"><button class="primary" type="submit">Simpan kehadiran</button><button type="button" id="clearForm">Bersihkan</button></div>
+  </form>
+  <div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Dinas</th><th>Jam</th><th>Status</th><th>Jam lembur</th><th></th></tr></thead><tbody id="attendanceRows"></tbody></table></div>
+</section>
+<section class="panel">
+ <div class="section-head"><div><div class="eyebrow">PAYROLL CALCULATOR</div><h2>Pengaturan & hasil payroll</h2></div><button id="calculate" class="primary">Hitung payroll</button></div>
+ <div class="grid">
+  <label>Tunjangan makan / hari (Rp)<input id="mealRate" type="number" min="0" value="12000"></label>
+  <label>Hari kerja pembagi unpaid leave<input id="workdayDivisor" type="number" min="1" value="26"></label>
+  <label>BPJS Kesehatan (%)<input id="healthRate" type="number" min="0" step=".01" value="1"></label>
+  <label>JHT (%)<input id="jhtRate" type="number" min="0" step=".01" value="2"></label>
+  <label>JP (%)<input id="jpRate" type="number" min="0" step=".01" value="1"></label>
+  <label>Dasar upah potongan (Rp)<input id="contributionBase" type="number" min="0" placeholder="Kosong = basic salary"></label>
+  <label>Upah lembur (Rp/jam)<input id="overtimeRate" type="number" min="0" placeholder="Perlu input manual"></label>
+  <label>Upah lembur lain disetujui (jam)<input id="otherOvertime" type="number" min="0" step=".25" value="0"></label>
+ </div>
+ <div id="payrollResult" class="payroll-result muted">Lengkapi data pekerja dan kehadiran, lalu hitung payroll.</div>
+ <div class="form-actions"><button id="printPayslip">Pratinjau / Cetak slip gaji</button><button id="exportCsv">Ekspor CSV</button><button id="backup">Backup JSON</button><label class="file-button">Pulihkan backup<input id="restore" type="file" accept="application/json"></label></div>
+</section>
+</main>
+<footer>Data disimpan lokal di perangkat ini. Lakukan backup secara berkala.</footer>
+<script src="app.js"></script>
+</body></html>
